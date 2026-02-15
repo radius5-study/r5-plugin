@@ -1,0 +1,146 @@
+---
+name: pr-review
+description: This skill should be used when the user asks to "review a PR", "review pull request", "check this PR", "look at this PR", "is this PR ready to merge", "PRレビューして", "PRをレビュー", "PR見て", "コードレビュー", or when performing automated or manual code reviews on GitHub pull requests. Provides a structured, incremental review workflow with security checks, file prioritization, and merge readiness assessment.
+---
+
+# PR Review Workflow
+
+Structured code review process for Copainter pull requests. Prioritize correctness, security, and actionable feedback over style nits.
+
+## Review Process Overview
+
+### Step 1: Gather PR Context
+
+Collect PR metadata before reviewing code:
+
+```bash
+# Get PR details
+gh pr view <PR_NUMBER> --json title,body,baseRefName,headRefName,files,commits
+
+# Get changed file list
+gh pr diff <PR_NUMBER> --name-only
+
+# Calculate diff size
+gh pr diff <PR_NUMBER> | wc -l
+```
+
+If the diff exceeds **5,000 lines**, skip the review entirely and post the skip notice from **`references/review-templates.md`**.
+
+### Step 2: Check for Previous Reviews
+
+When updating a review on a previously-reviewed PR:
+
+```bash
+# Find previous Claude review
+gh pr view <PR_NUMBER> --json comments,reviews --jq '
+  [
+    (.comments[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt}),
+    (.reviews[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt})
+  ] | sort_by(.at) | last | .body
+'
+
+# Check recent commits since last review
+gh pr view <PR_NUMBER> --json commits --jq '.commits[-10:][] | .oid[:7] + " " + .messageHeadline'
+```
+
+When previous review exists:
+- Check if previously raised issues have been addressed
+- Avoid repeating the same feedback
+- Focus ONLY on new changes since the last review
+
+### Step 3: Categorize and Prioritize Files
+
+Classify changed files by review priority. See **`references/file-categories.md`** for the full classification rules.
+
+**Key rule:** Never review lock file contents line-by-line. Acknowledge their presence briefly.
+
+### Step 4: Incremental Review Strategy
+
+**For large diffs (>300 lines or >10 files):** Review files one at a time using the Read tool, in priority order:
+1. Source code files first
+2. Test files second
+3. Config files third
+4. Lock files last (acknowledge only)
+
+```bash
+# Review individual file diff
+gh pr diff <PR_NUMBER> -- path/to/file
+```
+
+**For small diffs (<300 lines):** Review the full diff at once:
+```bash
+gh pr diff <PR_NUMBER>
+```
+
+### Step 5: Review Focus Areas
+
+Based on the PR's stated purpose, review ONLY:
+- Whether changes correctly implement the stated goal
+- Bugs or logic errors in NEW/MODIFIED code
+- Missing edge cases relevant to the change
+- Breaking changes or regressions
+
+DO NOT comment on:
+- Code style in unchanged lines
+- Unrelated improvements or refactoring suggestions
+- General best practices not directly relevant to this PR
+- Pre-existing issues in untouched code
+
+### Step 6: Security Scan
+
+Run security checks on changed source files. See **`references/security-patterns.md`** for grep patterns and detection rules.
+
+Flag security issues as **Critical** and require changes.
+
+### Step 7: Determine Merge Readiness
+
+**MERGE READY (LGTM)** — all true:
+- No Critical or High severity bugs
+- Implementation correctly addresses stated goal
+- No undocumented breaking changes
+- No security vulnerabilities introduced
+- No obvious logic errors
+
+**NOT MERGE READY** — any true:
+- Critical or High severity bugs found
+- Implementation does not match stated goal
+- Undocumented breaking changes
+- Security vulnerabilities introduced
+- Obvious logic errors causing runtime failures
+
+See **`references/review-templates.md`** for severity level definitions.
+
+### Step 8: Post Review
+
+Use the appropriate review template from **`references/review-templates.md`**:
+- `gh pr review --approve` for LGTM
+- `gh pr review --request-changes` for blocking issues
+- `gh pr review --comment` + `--approve` for minor suggestions only
+
+When issues or suggestions are found, always include the **🤖 AI Fix Prompt** section in a `<details>` block. Format each issue as a Coderabbit-style actionable instruction that an AI agent can directly execute:
+
+```
+In `@path/to/file.ts`:
+- Line 42: [Describe the problem and the exact fix, referencing specific
+symbols, functions, or variables so the agent can locate and modify
+the code without ambiguity.]
+```
+
+This allows developers to copy-paste the prompt into their AI agent for bulk fixes.
+
+## Anti-Hallucination Rules
+
+- NEVER fetch entire PR diff if >300 lines
+- NEVER review lock files line-by-line
+- NEVER make assumptions about code not yet read
+- ALWAYS review files incrementally, one at a time
+- ALWAYS understand each file before moving to the next
+- If unsure about something, re-read the specific file
+
+## Additional Resources
+
+### Reference Files
+
+- **`references/file-categories.md`** — File priority classification rules
+- **`references/security-patterns.md`** — Security grep patterns and detection rules
+- **`references/review-templates.md`** — Review posting templates (LGTM, changes requested, minor suggestions)
