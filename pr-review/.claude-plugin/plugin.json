@@ -1,8 +1,0 @@
-{
-	"name": "pr-review",
-	"description": "Structured PR review workflow with incremental file review, security checks, and AI-actionable fix prompts",
-	"version": "1.0.0",
-	"author": {
-		"name": "Copainter Team"
-	}
-}

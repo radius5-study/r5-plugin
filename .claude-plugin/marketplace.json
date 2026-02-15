@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "r5-plugin",
+  "version": "1.0.0",
+  "description": "This is a marketplace for plugins commonly used within Radius5.",
+  "owner": {
+    "name": "radius5-study",
+    "email": "info@radius5.co.jp"
+  },
+  "plugins": [
+    {
+      "name": "pr-review",
+      "source": "./plugins/pr-review",
+      "category": "development"
+    }
+  ]
+}
