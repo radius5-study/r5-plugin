@@ -83,4 +83,4 @@ Determine merge readiness and post via `gh pr review` using templates from **`re
 - **Critical/High issues found** → `gh pr review --request-changes`
 - **Only Medium suggestions** → `gh pr review --comment` then `--approve`
 
-Populate the `### 🤖 AI Fix Prompt` section with self-contained fix instructions (exact file paths, line numbers, what to change and why). (Hard Rule 2)
+Populate the `### 🤖 AI Fix Prompt` section with self-contained fix instructions (exact file paths, line numbers, what to change and why). Use 4 backticks (` ```` `) for the outer code fence so inner code examples with 3 backticks don't break rendering. (Hard Rule 2)

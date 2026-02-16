@@ -43,7 +43,7 @@ gh pr review <PR_NUMBER> --request-changes --body "$(cat <<'EOF'
 <details>
 <summary>Copy this prompt to your AI agent to fix all issues at once</summary>
 
-\`\`\`
+\`\`\`\`
 Fix the following issues in this repository:
 
 In `@path/to/file.ts`:
@@ -55,7 +55,7 @@ In `@path/to/another-file.ts`:
 - Around line N-M: [Describe the problem and the concrete fix, specifying
 which function/class/variable to modify and what the expected behavior
 should be after the fix.]
-\`\`\`
+\`\`\`\`
 
 </details>
 
@@ -84,13 +84,13 @@ gh pr review <PR_NUMBER> --comment --body "$(cat <<'EOF'
 <details>
 <summary>Copy this prompt to your AI agent to apply suggestions</summary>
 
-\`\`\`
+\`\`\`\`
 Apply the following suggestions in this repository:
 
 In `@path/to/file.ts`:
 - Around line N-M: [Describe the suggestion and how to apply it, referencing
 specific symbols so the agent can locate and modify the code unambiguously.]
-\`\`\`
+\`\`\`\`
 
 </details>
 
