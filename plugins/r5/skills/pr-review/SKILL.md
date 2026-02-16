@@ -10,6 +10,10 @@ Structured code review process for Copainter pull requests. Prioritize correctne
 
 ## Review Process Overview
 
+### Step 0: Read Project Guidelines
+
+First, read the repository's `CLAUDE.md` using the Read tool to understand project conventions and guidelines. Apply these conventions throughout the review.
+
 ### Step 1: Gather PR Context
 
 Collect PR metadata before reviewing code:
@@ -108,7 +112,19 @@ Run security checks on changed source files. See **`references/security-patterns
 
 Flag only Critical/High security issues. Ignore Low severity patterns (e.g., `console.log`, `print`).
 
-### Step 7: Determine Merge Readiness
+### Step 7: Run Specialized Review Agents
+
+Use pr-review-toolkit agents selectively based on the actual changes. Only invoke agents relevant to what was modified:
+
+- **code-reviewer** — Check code quality against project guidelines. Use on all source code changes.
+- **pr-test-analyzer** — Analyze test coverage. Use only if tests were added or modified.
+- **silent-failure-hunter** — Check error handling. Use only if error handling code was changed.
+- **type-design-analyzer** — Analyze type design. Use only if types or interfaces were modified.
+- **comment-analyzer** — Verify comment accuracy. Use only if significant comments or docstrings were added.
+
+Do NOT run all agents on every PR. Match agents to the changes.
+
+### Step 8: Determine Merge Readiness
 
 **MERGE READY (LGTM)** — all true:
 - No Critical or High severity bugs
@@ -126,7 +142,7 @@ Flag only Critical/High security issues. Ignore Low severity patterns (e.g., `co
 
 See **`references/review-templates.md`** for severity level definitions.
 
-### Step 8: Post Review
+### Step 9: Post Review
 
 Post the review to GitHub using `gh pr review` with the matching template from **`references/review-templates.md`**:
 - `gh pr review --approve` for LGTM
