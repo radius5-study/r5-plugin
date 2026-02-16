@@ -9,13 +9,13 @@
   },
   "plugins": [
     {
-      "name": "r5:pr-review",
+      "name": pr-review",
       "source": "./plugins/pr-review",
       "category": "development",
       "description": "PRレビュー用"
     },
     {
-      "name": "r5:atomic-pr",
+      "name": "atomic-pr",
       "source": "./plugins/atomic-pr",
       "category": "plan",
       "description": "planモードを抜けた際にAtomicなPRに分解します。"
