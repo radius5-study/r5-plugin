@@ -12,6 +12,12 @@
       "name": "pr-review",
       "source": "./plugins/pr-review",
       "category": "development"
+    },
+    {
+      "name": "atomic-pr",
+      "source": "./plugins/atomic-pr",
+      "category": "plan",
+      "description": "planモードを抜けた際にAtomicなPRに分解します。"
     }
   ]
 }
