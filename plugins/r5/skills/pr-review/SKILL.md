@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PR Review Workflow
 
-Structured code review process for Copainter pull requests. Prioritize correctness, security, and actionable feedback over style nits.
+Structured code review process for Copainter pull requests. Prioritize correctness, security, and actionable feedback. Do NOT report style nits or minor improvements.
 
 ## Review Process Overview
 
@@ -86,18 +86,27 @@ Based on the PR's stated purpose, review ONLY:
 - Bugs or logic errors in NEW/MODIFIED code
 - Missing edge cases relevant to the change
 - Breaking changes or regressions
+- Security vulnerabilities
 
-DO NOT comment on:
-- Code style in unchanged lines
+**Severity threshold — what to report:**
+- 🔴 **Critical/High**: ALWAYS report. These block merge.
+- 🟡 **Medium**: Report only if directly relevant to the PR's goal. Keep to 2-3 items max.
+- 🔵 **Low**: Do NOT report. No style nits, no minor improvements, no `console.log` mentions.
+
+**DO NOT comment on:**
+- Code style preferences (naming, formatting, import order)
+- Type annotation improvements (`: any`, missing generics, etc.)
+- Debug statements (`console.log`, `print`) unless in production-critical paths
 - Unrelated improvements or refactoring suggestions
 - General best practices not directly relevant to this PR
 - Pre-existing issues in untouched code
+- Documentation or comment suggestions
 
 ### Step 6: Security Scan
 
 Run security checks on changed source files. See **`references/security-patterns.md`** for grep patterns and detection rules.
 
-Flag security issues as **Critical** and require changes.
+Flag only Critical/High security issues. Ignore Low severity patterns (e.g., `console.log`, `print`).
 
 ### Step 7: Determine Merge Readiness
 
@@ -117,58 +126,29 @@ Flag security issues as **Critical** and require changes.
 
 See **`references/review-templates.md`** for severity level definitions.
 
-### Step 8: Compose AI Fix Prompt
+### Step 8: Post Review
 
-**MANDATORY** — Do this BEFORE posting the review. Whenever any issues or suggestions are found (any severity), you MUST compose a `### 🤖 AI Fix Prompt` section to include in the review body.
+Post the review to GitHub using `gh pr review` with the matching template from **`references/review-templates.md`**:
+- `gh pr review --approve` for LGTM
+- `gh pr review --request-changes` for blocking issues
+- `gh pr review --comment` then `--approve` for minor suggestions only
 
-This section aggregates all issues into a single, copy-pasteable prompt for AI-assisted bulk fixes. It MUST be included in the review body that gets posted in Step 9.
+The templates in **`references/review-templates.md`** include the `### 🤖 AI Fix Prompt` section. When filling in the template, you MUST populate this section with concrete, actionable fix instructions for every issue mentioned in the review. Do NOT skip it or leave it as placeholder text.
 
-Format:
-
-```
-### 🤖 AI Fix Prompt
-<details>
-<summary>Copy this prompt to your AI agent to fix all issues at once</summary>
-
-\`\`\`
-Fix the following issues in this repository:
-
-In `@path/to/file.ts`:
-- Line 42: [Describe the problem and the exact fix, referencing specific
-symbols, functions, or variables so the agent can locate and modify
-the code without ambiguity.]
-
-In `@path/to/another-file.ts`:
-- Around line N-M: [Describe the problem and the concrete fix, specifying
-which function/class/variable to modify and what the expected behavior
-should be after the fix.]
-\`\`\`
-
-</details>
-```
-
-**Rules for AI Fix Prompt:**
-- Include ALL issues from the review (Critical, High, Medium, Low)
-- Each instruction must be self-contained — the AI agent has no context from the review above
+**AI Fix Prompt rules:**
+- Each instruction must be self-contained — the AI agent has no context from the review
 - Reference exact file paths, line numbers, function/variable names
 - Describe both "what is wrong" and "how to fix it" concretely
 - Group instructions by file path
-
-### Step 9: Post Review
-
-Compose the COMPLETE review body first (issues + AI Fix Prompt from Step 8), then post using the appropriate template from **`references/review-templates.md`**:
-- `gh pr review --approve` for LGTM
-- `gh pr review --request-changes` for blocking issues
-- `gh pr review --comment` + `--approve` for minor suggestions only
-
-**IMPORTANT:** The review body MUST already contain the `### 🤖 AI Fix Prompt` section from Step 8 before posting. Do NOT post the review without it.
 
 ## Anti-Hallucination Rules
 
 - NEVER fetch entire PR diff if >300 lines — use incremental file-by-file review
 - NEVER review lock files line-by-line
 - NEVER make assumptions about code not yet read
-- NEVER post a review containing issues without the `### 🤖 AI Fix Prompt` section — compose it in Step 8 BEFORE posting in Step 9
+- NEVER post a review without running `gh pr review` — always post to GitHub, never just output text
+- NEVER post a review that has issues without a populated `### 🤖 AI Fix Prompt` section
+- NEVER report Low severity issues (style, minor improvements, debug statements)
 - ALWAYS understand each file before moving to the next
 - If unsure about something, re-read the specific file
 
