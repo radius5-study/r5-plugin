@@ -1,5 +1,5 @@
 {
-  "name": "atomic-pr",
+  "name": "r5:atomic-pr",
   "description": "Automatically breaks down implementation plans into focused, atomic PRs to prevent scope creep and PR bloat",
   "version": "0.1.0",
   "author": {
