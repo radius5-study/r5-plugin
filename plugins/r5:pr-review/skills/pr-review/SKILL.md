@@ -1,6 +1,7 @@
 ---
 name: r5:pr-review
 description: This skill should be used when the user asks to "review a PR", "review pull request", "check this PR", "look at this PR", "is this PR ready to merge", "PRレビューして", "PRをレビュー", "PR見て", "コードレビュー", or when performing automated or manual code reviews on GitHub pull requests. Provides a structured, incremental review workflow with security checks, file prioritization, and merge readiness assessment.
+disable-model-invocation: true
 ---
 
 # PR Review Workflow
