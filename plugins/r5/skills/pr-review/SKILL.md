@@ -31,14 +31,23 @@ gh pr diff <PR_NUMBER> | wc -l
 - **>300 lines or >10 files** → Review file by file (see Hard Rule 4)
 - **≤300 lines and ≤10 files** → Review full diff at once
 
-If a previous Claude review exists, retrieve it and focus only on new changes:
+**Check for previous review:** Try to load the review cache artifact, then check for previous review content on GitHub:
 
 ```bash
+# Download previous review metadata (from CI artifacts)
+gh run download --name claude-review-pr-<PR_NUMBER> --dir .claude-reviews/ 2>/dev/null
+
+# Read cache if available — contains head_sha, reviewed_at, review_outcome
+cat .claude-reviews/pr-<PR_NUMBER>.json 2>/dev/null
+
+# Get previous review content from GitHub
 gh pr view <PR_NUMBER> --json comments,reviews --jq '
   [(.comments[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt}),
    (.reviews[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt})]
   | sort_by(.at) | last | .body'
 ```
+
+If a previous review exists: avoid repeating the same feedback, focus only on new changes since the last review.
 
 ### 2. Review Code
 
