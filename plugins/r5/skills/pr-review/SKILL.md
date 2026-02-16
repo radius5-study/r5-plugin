@@ -25,7 +25,13 @@ gh pr diff <PR_NUMBER> --name-only
 gh pr diff <PR_NUMBER> | wc -l
 ```
 
-If the diff exceeds **5,000 lines**, skip the review entirely and post the skip notice from **`references/review-templates.md`**.
+**Diff size tiers** (calculated from `wc -l` above):
+
+| Total lines | Action |
+|---|---|
+| >5,000 | Skip review entirely — post skip notice from **`references/review-templates.md`** |
+| >300 or >10 files | Review incrementally, file by file (Step 4) |
+| ≤300 and ≤10 files | Review full diff at once |
 
 ### Step 2: Check for Previous Reviews
 
@@ -118,23 +124,47 @@ Use the appropriate review template from **`references/review-templates.md`**:
 - `gh pr review --request-changes` for blocking issues
 - `gh pr review --comment` + `--approve` for minor suggestions only
 
-When issues or suggestions are found, always include the **🤖 AI Fix Prompt** section in a `<details>` block. Format each issue as a Coderabbit-style actionable instruction that an AI agent can directly execute:
+### Step 9: Generate AI Fix Prompt
+
+Whenever any issues or suggestions are found (any severity), append a `### 🤖 AI Fix Prompt` section inside a `<details>` block to the review body. This aggregates all issues into a single, copy-pasteable prompt for AI-assisted bulk fixes.
+
+Format each issue as a Coderabbit-style actionable instruction:
 
 ```
+### 🤖 AI Fix Prompt
+<details>
+<summary>Copy this prompt to your AI agent to fix all issues at once</summary>
+
+\`\`\`
+Fix the following issues in this repository:
+
 In `@path/to/file.ts`:
 - Line 42: [Describe the problem and the exact fix, referencing specific
 symbols, functions, or variables so the agent can locate and modify
 the code without ambiguity.]
+
+In `@path/to/another-file.ts`:
+- Around line N-M: [Describe the problem and the concrete fix, specifying
+which function/class/variable to modify and what the expected behavior
+should be after the fix.]
+\`\`\`
+
+</details>
 ```
 
-This allows developers to copy-paste the prompt into their AI agent for bulk fixes.
+**Rules for AI Fix Prompt:**
+- Include ALL issues from the review (Critical, High, Medium, Low)
+- Each instruction must be self-contained — the AI agent has no context from the review above
+- Reference exact file paths, line numbers, function/variable names
+- Describe both "what is wrong" and "how to fix it" concretely
+- Group instructions by file path
 
 ## Anti-Hallucination Rules
 
-- NEVER fetch entire PR diff if >300 lines
+- NEVER fetch entire PR diff if >300 lines — use incremental file-by-file review
 - NEVER review lock files line-by-line
 - NEVER make assumptions about code not yet read
-- ALWAYS review files incrementally, one at a time
+- NEVER post a review containing issues without the `### 🤖 AI Fix Prompt` section (Step 9)
 - ALWAYS understand each file before moving to the next
 - If unsure about something, re-read the specific file
 
