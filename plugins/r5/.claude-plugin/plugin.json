@@ -1,0 +1,8 @@
+{
+  "name": "r5",
+  "description": "Radius5チーム向けの開発支援プラグイン",
+  "version": "0.0.1",
+  "author": {
+    "name": "Katsuyuki Karasawa"
+  }
+}

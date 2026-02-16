@@ -9,16 +9,10 @@
   },
   "plugins": [
     {
-      "name": pr-review",
-      "source": "./plugins/pr-review",
+      "name": "r5",
+      "source": "./plugins/r5",
       "category": "development",
-      "description": "PRレビュー用"
-    },
-    {
-      "name": "atomic-pr",
-      "source": "./plugins/atomic-pr",
-      "category": "plan",
-      "description": "planモードを抜けた際にAtomicなPRに分解します。"
+      "description": "Radius5チーム向けの開発支援プラグイン"
     }
   ]
 }
