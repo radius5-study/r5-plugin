@@ -124,6 +124,8 @@ Use pr-review-toolkit agents selectively based on the actual changes. Only invok
 
 Do NOT run all agents on every PR. Match agents to the changes.
 
+**Important:** Each agent may produce its own findings. Apply the same severity threshold from Step 5 to agent outputs — discard any Low severity findings and limit Medium to 2-3 items max. Only include Critical/High findings in the final review.
+
 ### Step 8: Determine Merge Readiness
 
 **MERGE READY (LGTM)** — all true:

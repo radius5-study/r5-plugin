@@ -25,7 +25,6 @@ Check the changed files list for:
 
 | Pattern | Issue | Severity |
 |---------|-------|----------|
-| `console.log` | Debug statement left in | Low |
 | `// TODO`, `// FIXME` | Incomplete implementation | Medium |
 | `: any` | Disables type checking | Medium |
 | `eval(` | Code injection risk | Critical |
@@ -39,7 +38,6 @@ Check the changed files list for:
 | Pattern | Issue | Severity |
 |---------|-------|----------|
 | `except:` (bare except) | Swallows all exceptions | Medium |
-| `print(` | Debug print left in | Low |
 | `TODO`, `FIXME` | Incomplete implementation | Medium |
 | `Any` (from typing) | Disables type checking | Medium |
 | `exec(`, `eval(` | Code injection risk | Critical |
