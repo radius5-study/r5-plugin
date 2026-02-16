@@ -117,18 +117,13 @@ Flag security issues as **Critical** and require changes.
 
 See **`references/review-templates.md`** for severity level definitions.
 
-### Step 8: Post Review
+### Step 8: Compose AI Fix Prompt
 
-Use the appropriate review template from **`references/review-templates.md`**:
-- `gh pr review --approve` for LGTM
-- `gh pr review --request-changes` for blocking issues
-- `gh pr review --comment` + `--approve` for minor suggestions only
+**MANDATORY** — Do this BEFORE posting the review. Whenever any issues or suggestions are found (any severity), you MUST compose a `### 🤖 AI Fix Prompt` section to include in the review body.
 
-### Step 9: Generate AI Fix Prompt
+This section aggregates all issues into a single, copy-pasteable prompt for AI-assisted bulk fixes. It MUST be included in the review body that gets posted in Step 9.
 
-Whenever any issues or suggestions are found (any severity), append a `### 🤖 AI Fix Prompt` section inside a `<details>` block to the review body. This aggregates all issues into a single, copy-pasteable prompt for AI-assisted bulk fixes.
-
-Format each issue as a Coderabbit-style actionable instruction:
+Format:
 
 ```
 ### 🤖 AI Fix Prompt
@@ -159,12 +154,21 @@ should be after the fix.]
 - Describe both "what is wrong" and "how to fix it" concretely
 - Group instructions by file path
 
+### Step 9: Post Review
+
+Compose the COMPLETE review body first (issues + AI Fix Prompt from Step 8), then post using the appropriate template from **`references/review-templates.md`**:
+- `gh pr review --approve` for LGTM
+- `gh pr review --request-changes` for blocking issues
+- `gh pr review --comment` + `--approve` for minor suggestions only
+
+**IMPORTANT:** The review body MUST already contain the `### 🤖 AI Fix Prompt` section from Step 8 before posting. Do NOT post the review without it.
+
 ## Anti-Hallucination Rules
 
 - NEVER fetch entire PR diff if >300 lines — use incremental file-by-file review
 - NEVER review lock files line-by-line
 - NEVER make assumptions about code not yet read
-- NEVER post a review containing issues without the `### 🤖 AI Fix Prompt` section (Step 9)
+- NEVER post a review containing issues without the `### 🤖 AI Fix Prompt` section — compose it in Step 8 BEFORE posting in Step 9
 - ALWAYS understand each file before moving to the next
 - If unsure about something, re-read the specific file
 
