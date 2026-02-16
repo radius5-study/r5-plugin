@@ -33,22 +33,20 @@ gh pr diff <PR_NUMBER> | wc -l
 
 **Check for previous review:** Try to load the review cache artifact, then check for previous review content on GitHub:
 
-```bash
-# Check if review cache artifact exists, download if found
-ARTIFACT_NAME="claude-review-pr-<PR_NUMBER>"
-if gh api repos/{owner}/{repo}/actions/artifacts --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\") | .id" | head -1 | grep -q .; then
-  gh run download --name "$ARTIFACT_NAME" --dir .claude-reviews/
-  cat .claude-reviews/pr-<PR_NUMBER>.json
-fi
+**Check for previous review:**
 
-# Get previous review content from GitHub
+```bash
+# CI: read cache restored by actions/cache
+cat .claude-reviews/pr-<PR_NUMBER>.json 2>/dev/null
+
+# Fallback: get previous review from GitHub
 gh pr view <PR_NUMBER> --json comments,reviews --jq '
   [(.comments[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt}),
    (.reviews[]? | select(.body | contains("Reviewed by Claude")) | {body: .body, at: .createdAt})]
   | sort_by(.at) | last | .body'
 ```
 
-If a previous review exists: avoid repeating the same feedback, focus only on new changes since the last review.
+If a previous review exists: avoid repeating the same feedback, focus only on new changes.
 
 ### 2. Review Code
 
