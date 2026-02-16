@@ -112,13 +112,13 @@ When diff exceeds 5000 lines:
 
 ```bash
 gh pr comment <PR_NUMBER> --body "$(cat <<'EOF'
-## ⏭️ 自動レビュースキップ
+## ⏭️ Auto Review Skipped
 
-このPRは **[LINE_COUNT]行** の変更があり、自動レビューの上限（5000行）を超えています。
+This PR has **[LINE_COUNT] lines** of changes, exceeding the auto review limit (5000 lines).
 
-**対応オプション:**
-- PRを小さな単位に分割する
-- `skip-claude-review` ラベルを付けて手動レビューを依頼する
+**Options:**
+- Split the PR into smaller units
+- Add the \`skip-claude-review\` label and request a manual review
 
 ---
 *Automated message*
