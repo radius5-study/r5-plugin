@@ -6,13 +6,14 @@ disable-model-invocation: true
 
 # PR Review Workflow
 
-## Hard Rules (MUST follow)
+## Hard Rules (MUST follow — violation of ANY rule is a critical failure)
 
 1. **No Low severity reports.** Do NOT report style nits, type annotation improvements, debug statements, import order, documentation suggestions, or any Low severity finding. This applies to your own findings AND all agent outputs. If unsure, don't report it.
 2. **Always include AI Fix Prompt.** Every review with issues MUST end with a `### 🤖 AI Fix Prompt` section per **`references/review-templates.md`**.
 3. **Always post via `gh pr review`.** Never just output text. Always run the `gh pr review` command.
 4. **Never fetch full diff if >300 lines.** Review file by file with `gh pr diff <PR_NUMBER> -- path/to/file`.
 5. **Never review lock files line-by-line.** Acknowledge their presence briefly.
+6. **Strictly follow the output templates.** The review body MUST use the exact template structure from **`references/review-templates.md`**. Do NOT invent your own format. The body MUST start with one of: `## ✅ LGTM`, `## ⚠️ Changes Requested`, `## 💬 Review Complete`, `## ⏭️ Auto Review Skipped`. Do NOT use `# Issue 1`, `# Issue 2`, numbered issue headers, before/after code diffs, or any other custom format.
 
 ## Review Steps
 
@@ -83,4 +84,42 @@ Determine merge readiness and post via `gh pr review` using templates from **`re
 - **Critical/High issues found** → `gh pr review --request-changes`
 - **Only Medium suggestions** → `gh pr review --comment` then `--approve`
 
+**Required template structure (Hard Rule 6):**
+
+For changes requested, the body MUST follow this skeleton exactly:
+
+```
+## ⚠️ Changes Requested
+
+**Summary**: [One sentence]
+
+**Assessment**: [Why not ready]
+
+### Issues Found
+[Bulleted list with file:line references and severity]
+
+### 🤖 AI Fix Prompt
+<details>
+<summary>Copy this prompt to your AI agent to fix all issues at once</summary>
+
+````
+Fix the following issues in this repository:
+
+In `@path/to/file`:
+- Line N: [What is wrong and how to fix it]
+````
+
+</details>
+
+---
+*Reviewed by Claude*
+```
+
 Populate the `### 🤖 AI Fix Prompt` section with self-contained fix instructions (exact file paths, line numbers, what to change and why). Use 4 backticks (` ```` `) for the outer code fence so inner code examples with 3 backticks don't break rendering. (Hard Rule 2)
+
+**NEVER DO THIS — the following formats are WRONG:**
+
+- ❌ `# Issue 1: ...` / `# Issue 2: ...` — numbered issue headers
+- ❌ Showing "変更前" / "変更後" / "before" / "after" code diffs in the review body
+- ❌ Listing file paths as section headers (`## path/to/file.ts`)
+- ❌ Any format that doesn't start with `## ✅`, `## ⚠️`, or `## 💬`
