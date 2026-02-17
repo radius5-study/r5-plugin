@@ -9,6 +9,32 @@ description: This skill should be used when the user asks to "research a GitHub 
 
 Investigate any GitHub repository's implementation details using Deepwiki MCP. This skill enables research on undocumented internal workflows, execution patterns, and core functionalities across any public GitHub repository.
 
+## Setup
+
+This plugin automatically configures Deepwiki MCP for public repository research. No manual setup required.
+
+**For private repositories:**
+
+If you need to research private repositories, update `plugins/r5/.mcp.json` to include your API key:
+
+```json
+{
+  "deepwiki": {
+    "url": "https://mcp.devin.ai/mcp",
+    "headers": {
+      "Authorization": "Bearer ${DEEPWIKI_API_KEY}"
+    }
+  }
+}
+```
+
+Then set the environment variable:
+```bash
+export DEEPWIKI_API_KEY="your-api-key-here"
+```
+
+See [Deepwiki MCP documentation](https://docs.devin.ai/work-with-devin/deepwiki-mcp) for API key setup.
+
 ## Triggers
 
 Use this skill when user mentions any of the following:
