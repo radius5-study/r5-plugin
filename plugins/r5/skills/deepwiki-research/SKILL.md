@@ -42,14 +42,22 @@ Identify the specific feature, function, or behavior to understand. Formulate a 
 
 ### Step 3: Research with Deepwiki MCP
 
-Use `ask_question` to get an overview from Deepwiki:
+Choose the appropriate approach based on your familiarity with the repository:
 
+**Option A: Get repository overview first** (recommended for large/unfamiliar repos)
+```python
+read_wiki_structure(repoName="owner/repo")
+```
+
+**Option B: Ask specific question directly** (when you know what you're looking for)
 ```python
 ask_question(
     repoName="owner/repo",
     question="Your specific question about the implementation"
 )
 ```
+
+See [references/deepwiki-tools.md](references/deepwiki-tools.md) for detailed API reference.
 
 ### Step 4: Identify file paths from Deepwiki response
 
