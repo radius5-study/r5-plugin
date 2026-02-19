@@ -14,6 +14,7 @@ disable-model-invocation: true
 4. **Never fetch full diff if >300 lines.** Review file by file with `gh pr diff <PR_NUMBER> -- path/to/file`.
 5. **Never review lock files line-by-line.** Acknowledge their presence briefly.
 6. **Strictly follow the output templates.** The review body MUST use the exact template structure from **`references/review-templates.md`**. Do NOT invent your own format. The body MUST start with one of: `## ✅ LGTM`, `## ⚠️ Changes Requested`, `## 💬 Review Complete`, `## ⏭️ Auto Review Skipped`. Do NOT use `# Issue 1`, `# Issue 2`, numbered issue headers, before/after code diffs, or any other custom format.
+7. **AI Fix Prompt MUST be in English.** Even if the rest of the review is in Japanese, the AI Fix Prompt content (the text inside the code block) MUST be written in English ONLY. This ensures compatibility with AI agents that may not understand Japanese.
 
 ## Review Steps
 

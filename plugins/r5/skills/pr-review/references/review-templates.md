@@ -44,6 +44,8 @@ gh pr review <PR_NUMBER> --request-changes --body "$(cat <<'EOF'
 <summary>Copy this prompt to your AI agent to fix all issues at once</summary>
 
 \`\`\`\`
+# NOTE: This prompt MUST be written in English only, regardless of the review language.
+
 Fix the following issues in this repository:
 
 In `@path/to/file.ts`:
@@ -85,6 +87,8 @@ gh pr review <PR_NUMBER> --comment --body "$(cat <<'EOF'
 <summary>Copy this prompt to your AI agent to apply suggestions</summary>
 
 \`\`\`\`
+# NOTE: This prompt MUST be written in English only, regardless of the review language.
+
 Apply the following suggestions in this repository:
 
 In `@path/to/file.ts`:
