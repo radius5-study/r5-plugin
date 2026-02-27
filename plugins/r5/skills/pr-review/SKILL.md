@@ -25,7 +25,7 @@ Read the repository's `CLAUDE.md`, then collect PR metadata:
 ```bash
 gh pr view <PR_NUMBER> --json title,body,baseRefName,headRefName,files,commits
 gh pr diff <PR_NUMBER> --name-only
-gh pr diff <PR_NUMBER> | wc -l
+gh pr view 1629 --json additions,deletions | jq '.additions + .deletions'
 ```
 
 **Diff size tiers:**
