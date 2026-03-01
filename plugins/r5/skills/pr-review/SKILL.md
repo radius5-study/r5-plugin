@@ -25,11 +25,11 @@ Read the repository's `CLAUDE.md`, then collect PR metadata:
 ```bash
 gh pr view <PR_NUMBER> --json title,body,baseRefName,headRefName,files,commits
 gh pr diff <PR_NUMBER> --name-only
-gh pr view 1629 --json additions,deletions | jq '.additions + .deletions'
+gh pr view <PR_NUMBER> --json additions,deletions | jq '.additions + .deletions'
 ```
 
 **Diff size tiers:**
-- **>5,000 lines** → Skip review, post skip notice from **`references/review-templates.md`**
+- **>10,000 lines** → Skip review, post skip notice from **`references/review-templates.md`**
 - **>300 lines or >10 files** → Review file by file (see Hard Rule 4)
 - **≤300 lines and ≤10 files** → Review full diff at once
 
