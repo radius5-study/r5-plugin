@@ -62,9 +62,17 @@ Extract the repository name from user input. The format should be `owner/repo` (
 
 If user doesn't specify a repository, ask: "Which GitHub repository would you like to investigate? Please provide it in `owner/repo` format."
 
-### Step 2: Understand what to investigate
+### Step 2: Clarify the user's goal
 
-Identify the specific feature, function, or behavior to understand. Formulate a clear question.
+**First, review the existing conversation history.** The user may have already explained their purpose in prior messages — extract both the topic and the goal from that context without asking again.
+
+If the goal is still unclear after reviewing the conversation, ask **one focused question before proceeding**:
+
+> "What are you ultimately trying to do with this? (e.g., understand how it works, find where it's implemented, debug an issue, implement something similar)"
+
+Only proceed to Step 3 once you understand both:
+- **What** to investigate (topic/feature)
+- **Why** (the user's goal — this shapes what to look for and how to report it)
 
 ### Step 3: Research with Deepwiki MCP
 
