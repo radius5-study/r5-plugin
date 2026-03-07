@@ -6,12 +6,98 @@ Detailed reference for Deepwiki MCP tools.
 
 Deepwiki MCP provides the following tools for investigating GitHub repositories:
 
-1. `ask_question` - Ask questions about a repository
-2. `read_wiki_structure` - Get repository structure overview
+1. `read_wiki_structure` - Get list of wiki topics for a repository
+2. `read_wiki_contents` - Read full wiki page for a specific topic (**highest accuracy**)
+3. `ask_question` - Ask targeted questions about a repository
+
+**Recommended order**: `read_wiki_structure` → `read_wiki_contents` → `ask_question`
 
 ---
 
-## Tool 1: ask_question
+## Tool 1: read_wiki_structure
+
+### Description
+Get the list of wiki topics for a repository. Use this first to discover which topics exist before reading content.
+
+### Parameters
+
+```python
+read_wiki_structure(
+    repoName: str      # Required: Repository name in "owner/repo" format
+)
+```
+
+### Return Value
+
+A list of topic names (e.g., `["Overview", "Architecture", "Authentication", "Data Flow", "API Reference"]`).
+
+### Usage
+
+```python
+# Always start here for unfamiliar repos
+read_wiki_structure(repoName="Comfy-Org/ComfyUI")
+# → Pick the most relevant topic(s) to read with read_wiki_contents
+```
+
+---
+
+## Tool 2: read_wiki_contents
+
+### Description
+Read the **full wiki page** for a specific topic. This is the highest-accuracy tool — it returns curated documentation with precise file paths, class names, and implementation details, not RAG-generated answers.
+
+### Parameters
+
+```python
+read_wiki_contents(
+    repoName: str,     # Required: Repository name in "owner/repo" format
+    topic: str         # Required: Topic name from read_wiki_structure output
+)
+```
+
+### Return Value
+
+Full wiki page content:
+- Accurate file paths and directory structure
+- Class/function names with context
+- Architecture diagrams (as text/ASCII)
+- Implementation details and data flow
+
+### Why this matters
+
+| Tool | Source | Accuracy |
+|------|--------|----------|
+| `ask_question` | RAG over indexed content | Medium — depends on question phrasing |
+| `read_wiki_contents` | Curated wiki page | **High** — complete, structured information |
+
+### Usage Examples
+
+```python
+# Step 1: Discover topics
+read_wiki_structure(repoName="facebook/react")
+# Returns: ["Overview", "Fiber Architecture", "Reconciler", "Hooks", ...]
+
+# Step 2: Read the relevant topic in full
+read_wiki_contents(repoName="facebook/react", topic="Fiber Architecture")
+# Returns: full page with accurate file paths, class names, and flow diagrams
+
+# Step 3: Ask follow-up questions if needed
+ask_question(
+    repoName="facebook/react",
+    question="How does the Fiber scheduler prioritize work units?"
+)
+```
+
+### When to Use
+
+- ✅ **Use when**: You found a relevant topic in `read_wiki_structure` output
+- ✅ **Use when**: You need accurate file paths before running `gh` CLI verification
+- ✅ **Use when**: You want the full picture before drilling into specifics
+- ❌ **Skip when**: No relevant topic exists in the structure (fall back to `ask_question`)
+
+---
+
+## Tool 3: ask_question
 
 ### Description
 Ask specific questions about a GitHub repository to investigate implementation details.

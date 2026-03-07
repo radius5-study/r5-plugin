@@ -68,20 +68,32 @@ Identify the specific feature, function, or behavior to understand. Formulate a 
 
 ### Step 3: Research with Deepwiki MCP
 
-Choose the appropriate approach based on your familiarity with the repository:
+**3 tools, use in order** — this sequence dramatically improves precision:
 
-**Option A: Get repository overview first** (recommended for large/unfamiliar repos)
+**Step 3a: Get topic list** (always start here for unfamiliar repos)
 ```python
 read_wiki_structure(repoName="owner/repo")
+# → Returns list of wiki topics (e.g., "Architecture", "Authentication", "Data Flow")
 ```
 
-**Option B: Ask specific question directly** (when you know what you're looking for)
+**Step 3b: Read the most relevant topic in full** (this is the key step)
+```python
+read_wiki_contents(repoName="owner/repo", topic="Architecture")
+# → Returns comprehensive wiki page: accurate file paths, class names, data flow diagrams
+# → Far more reliable than ask_question alone — use this before asking questions
+```
+
+**Step 3c: Ask follow-up questions** (for specifics not covered in the wiki page)
 ```python
 ask_question(
     repoName="owner/repo",
     question="Your specific question about the implementation"
 )
 ```
+
+> **Why this order matters**: `read_wiki_contents` returns the full curated wiki page for a topic,
+> giving far more accurate file paths and implementation details than RAG-based Q&A alone.
+> Use it *before* `ask_question` to ground your follow-up questions in real context.
 
 See [references/deepwiki-tools.md](references/deepwiki-tools.md) for detailed API reference.
 

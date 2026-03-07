@@ -162,11 +162,10 @@ gh api repos/owner/repo/commits -f author="author@email.com" | jq '.[] | {messag
 # Step 1: Understand overall structure
 read_wiki_structure(repoName="large-org/monorepo")
 
-# Step 2: Investigate each main directory
-ask_question(repoName="large-org/monorepo", question="What is in packages/core?")
-ask_question(repoName="large-org/monorepo", question="What is in packages/utils?")
+# Step 2: Read the most relevant topic in full
+read_wiki_contents(repoName="large-org/monorepo", topic="Architecture")
 
-# Step 3: Narrow down to package of interest
+# Step 3: Narrow down with targeted questions
 ask_question(repoName="large-org/monorepo", question="How does packages/core/src/engine work?")
 ```
 
@@ -396,22 +395,25 @@ ask_question(
 ### Recommended Flow
 
 ```python
-# 1. Understand structure
+# 1. Get topic list
 read_wiki_structure(repoName="owner/repo")
 
-# 2. Investigate based on purpose with Deepwiki
-ask_question(repoName="owner/repo", question="Specific question")
+# 2. Read the most relevant topic in full (KEY STEP — highest accuracy)
+read_wiki_contents(repoName="owner/repo", topic="Most Relevant Topic")
 
-# 3. Always verify with gh CLI
+# 3. Ask follow-up questions for specifics not in the wiki page
+ask_question(repoName="owner/repo", question="Specific follow-up question")
+
+# 4. Always verify with gh CLI using file paths from steps 2-3
 # gh api repos/owner/repo/contents/path/to/file | jq -r '.content' | base64 -d
 
-# 4. Track related files
+# 5. Track related files
 # gh api search/code -X GET -f q="repo:owner/repo related_function"
 
-# 5. Understand background from PRs and issues
+# 6. Understand background from PRs and issues
 # gh pr list --repo owner/repo --search "feature-name"
 
-# 6. Compare with past versions as needed
+# 7. Compare with past versions as needed
 # gh api repos/owner/repo/contents/file?ref=v1.0.0
 ```
 
