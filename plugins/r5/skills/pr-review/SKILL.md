@@ -77,6 +77,23 @@ Use pr-review-toolkit agents selectively — only invoke what's relevant to the 
 
 **Filter agent outputs by the same severity threshold.** Discard all Low findings from agents.
 
+### 3.5. Run Simplification Analysis (conditional)
+
+**Only run this step when NO Critical or High severity issues were found in Steps 2–3.**
+
+Run the **code-simplifier** agent against source code files changed in the PR. The goal is to identify opportunities for improving clarity, reducing complexity, and removing unnecessary abstractions — without changing behavior.
+
+**Scope:**
+- Only analyze HIGH PRIORITY files (source code) from **`references/file-categories.md`**
+- Skip test files, config files, and lock files
+- Focus on code added or modified in this PR, not pre-existing code
+
+**How to use results:**
+- Simplification suggestions are **always non-blocking** — they NEVER affect merge readiness
+- Include up to 3 actionable suggestions in the review under `### 💡 Simplification Suggestions`
+- Add simplification instructions to the AI Fix Prompt section so the author can apply them with one click
+- If code-simplifier finds nothing meaningful, omit the section entirely
+
 ### 4. Post Review
 
 Determine merge readiness and post via `gh pr review` using templates from **`references/review-templates.md`**:

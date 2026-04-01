@@ -18,6 +18,27 @@ gh pr review <PR_NUMBER> --approve --body "$(cat <<'EOF'
 
 [Optional: Highlights or minor suggestions that don't block merge]
 
+[If code-simplifier found suggestions, include the following section. Omit entirely if none.]
+
+### 💡 Simplification Suggestions (non-blocking)
+[Up to 3 suggestions with file:line references]
+
+### 🤖 AI Fix Prompt
+<details>
+<summary>Copy this prompt to your AI agent to apply simplifications</summary>
+
+\`\`\`\`
+# NOTE: This prompt MUST be written in English only, regardless of the review language.
+
+Apply the following simplification suggestions in this repository:
+
+In `@path/to/file.ts`:
+- Around line N-M: [Describe the simplification and how to apply it, referencing
+specific symbols so the agent can locate and modify the code unambiguously.]
+\`\`\`\`
+
+</details>
+
 ---
 *Reviewed by Claude*
 EOF
@@ -81,6 +102,11 @@ gh pr review <PR_NUMBER> --comment --body "$(cat <<'EOF'
 
 ### Suggestions (non-blocking)
 [List of Medium/Low severity suggestions]
+
+[If code-simplifier found suggestions, include the following section. Omit entirely if none.]
+
+### 💡 Simplification Suggestions (non-blocking)
+[Up to 3 suggestions with file:line references]
 
 ### 🤖 AI Fix Prompt
 <details>
