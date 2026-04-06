@@ -138,7 +138,7 @@ gh pr review <PR_NUMBER> --approve --body "✅ LGTM - Minor suggestions provided
 
 ## Large PR Skip Notice
 
-When diff exceeds 5000 lines:
+When diff exceeds 20000 lines:
 
 ```bash
 gh pr comment <PR_NUMBER> --body "$(cat <<'EOF'
